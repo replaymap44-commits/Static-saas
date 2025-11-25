@@ -5,7 +5,10 @@ A Python bot using Playwright to retrieve information from the Rockstar Social C
 This provides a foundation for building more advanced scraping functionality.
 """
 
+from datetime import datetime
+
 from playwright.sync_api import sync_playwright
+from playwright._impl._errors import TimeoutError as PlaywrightTimeoutError
 
 
 def main():
@@ -33,13 +36,17 @@ def main():
             title = page.title()
             print(f"Page Title: {title}")
             
-            # Take a screenshot as proof of access
-            screenshot_path = "screenshot.png"
+            # Take a screenshot as proof of access (with timestamp for uniqueness)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            screenshot_path = f"screenshot_{timestamp}.png"
             page.screenshot(path=screenshot_path)
             print(f"Screenshot saved to: {screenshot_path}")
             
+        except PlaywrightTimeoutError as e:
+            print(f"Timeout error while loading page: {e}")
+            raise
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f"Failed to access Rockstar Social Club: {e}")
             raise
         
         finally:

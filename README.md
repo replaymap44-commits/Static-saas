@@ -53,7 +53,7 @@ The bot will:
 1. Launch a headless Chromium browser
 2. Navigate to the Rockstar Social Club website
 3. Print the page title to verify connection
-4. Save a screenshot as `screenshot.png`
+4. Save a screenshot with a timestamp (e.g., `screenshot_20240101_120000.png`)
 5. Close the browser
 
 ## Configuration
