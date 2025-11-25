@@ -3,7 +3,7 @@ Web scraping bot for Rockstar Social Club website.
 Uses Playwright to automate browser interactions.
 """
 
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, Error as PlaywrightError
 
 
 def main():
@@ -16,7 +16,12 @@ def main():
         # Navigate to Rockstar Social Club
         url = "https://socialclub.rockstargames.com/"
         print(f"Navigating to {url}...")
-        page.goto(url)
+        try:
+            page.goto(url)
+        except PlaywrightError as e:
+            print(f"Error navigating to {url}: {e}")
+            browser.close()
+            return
 
         # Print the page title to verify access
         title = page.title()
@@ -24,8 +29,11 @@ def main():
 
         # Capture a screenshot
         screenshot_path = "screenshot.png"
-        page.screenshot(path=screenshot_path)
-        print(f"Screenshot saved to {screenshot_path}")
+        try:
+            page.screenshot(path=screenshot_path)
+            print(f"Screenshot saved to {screenshot_path}")
+        except (PlaywrightError, OSError) as e:
+            print(f"Error saving screenshot: {e}")
 
         # Close the browser
         browser.close()
